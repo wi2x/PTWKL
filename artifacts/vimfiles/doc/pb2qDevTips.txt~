@@ -1,0 +1,90 @@
+*devpb2qTips.txt*	pb2q Software Development Tips	Last Change: dd Mmm yyyy
+
+*devpb2qTips*	*devtips* 
+
+
+			pb2q's Software Development Tips
+
+
+		    This is a list of programming tips.
+
+		    Note: Ctrl-o returns to the previous help file.
+
+
+
+|devpb2q-General|		Tips related to general development.
+|devpb2q-StdC|			Tips related to Standard C development.
+|devpb2q-plugin|		Tips related to NPAPI/general browser plugin development.
+|devpb2q-ActiveX|		Tips related to ActiveX development.
+|devpb2q-MS|			Tips related to General Microslaw development.
+|devpb2q-Questions/Needs|	Itches requiring scratching.
+|devpb2q-Answered|		Scratched itches.
+
+
+===============================================================================
+General Tips						       *devpb2q-General* 
+
+- 04/19/11 git: doing git pulls from a repository on a windows box.
+	run ~git daemon --export-all --base-path=BASE_PATH~ 
+	where e.g. BASE_PATH=d:\projects\
+	
+
+===============================================================================
+Standard C Tips							  *devpb2q-StdC* 
+
+
+===============================================================================
+General Browser Plugin & NPAPI Tips				*devpb2q-plugin*
+
+
+===============================================================================
+ActiveX Tips						       *devpb2q-ActiveX*
+
+
+===============================================================================
+Microslaw Tips							    *devpb2q-MS*
+
+- 02/11/10 converting LPTSTR to char *.  check sizeof(TCHAR) for an acceptable
+	UNICODE kludge:
+
+	From: http://stackoverflow.com/questions/342772/lptstr-to-char
+
+		char * pCopy = NULL;
+		if (sizeof(TCHAR) == sizeof(char))
+		{
+		   size_t size = strlen(pOriginal);
+		   pCopy = new char[size + 1];
+		   strcpy(pCopy, pOriginal);
+		}
+		else
+		{
+		    size_t size = wcstombs(NULL, pOriginal, 0);
+		    pCopy = new char[size + 1];
+		    wcstombs(pCopy, pOriginal, size + 1);
+		}
+
+	Or even better:
+
+		char * copy = NULL;
+		if (sizeof(TCHAR) == sizeof(char))
+		    copy = (char *) original;
+		else
+		{
+		    size_t size = wcstombs(NULL, original, 0);
+		    copy = (char *) malloc(sizeof(char) * (size + 1));
+
+		    if (copy)
+		    	wcstombs(pCopy, original, size + 1);
+
+		    free(original);
+		}
+
+
+===============================================================================
+Questions/Needs					       *devpb2q-Questions/Needs*
+
+
+===============================================================================
+Answered						      *devpb2q-Answered*
+
+

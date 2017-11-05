@@ -1,0 +1,8 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =6
+let g:netrw_dirhist_1='C:/Users/patrick/projects/PayerIntel/src/PayerIntel'
+let g:netrw_dirhist_2='C:/Users/patrick/projects/PayerIntel/src/PayerIntel/PayerIntel'
+let g:netrw_dirhist_3='C:/Users/patrick/projects/MySynvisc/src/db/Database/Database/dbo/Tables'
+let g:netrw_dirhist_4='C:/Users/patrick/projects/CareForm/CareForm/src/Careform/Careform/CaseApi/Models'
+let g:netrw_dirhist_5='C:/Users/patrick/projects/TolmarSync/TolmarSync/src/TolmarSync/TolmarSync/Scripts'
+let g:netrw_dirhist_6='C:/Users/patrick/docs/SOWs_MSAs_etc'

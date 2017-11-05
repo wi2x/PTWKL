@@ -1,0 +1,290 @@
+*pb2qVimTips.txt*		pb2q VIM Tips	       Last Change: dd Mmm yyyy
+
+*pb2qVimTips*	*vimtips* 
+
+
+				pb2q's VIM Tips
+
+
+		    This is a list of tips for using VIM/vi.
+
+		    Note: Ctrl-o returns to the previous help file.
+
+
+
+|pb2q-LearnedThis|	Tips sussed out by pb2q, from the very beginning.
+|pb2q-Internalized|	Tips pb2q no longer needs to look at.
+|pb2q-NeedsReview|	Tips pb2q thought he no longer needed to look at.
+|pb2q-ToLearn|		Tips pb2q should study.
+|pb2q-Questions/Needs|	Itches requiring scratching.
+|pb2q-Answered|		Scratched itches.
+
+
+===============================================================================
+Learned This						      *pb2q-LearnedThis* 
+
+- 10/24/11 killing CRLF, e.g., in windows:
+	- make sure the fileformat is set correctly for the current buffer:
+		~:e ++ff=unix~(^M should show up at CRLFs).
+	- regexp replace the ^M: :%s/\r\+$//e
+- 08/31/11 ~ci~ for 'change inner':
+	- ~ci)~ change everything between ()
+	- ~ci]~ change everything between []
+	-  ci"  change everything between ""
+- 06/14/11~:g/^/m0~reverses the order of all lines in the file.
+	~g~means 'take action on any line matching a regexp'
+	~^~matches any line start (all lines will match this regexp)
+   	~m~means 'move'
+	~0~is a destination for~m~, meaning 'line 0'
+- 03/13/11~[m~and~]m~ to go to [count] previous/next start of a method in
+	classes like java where methods are defined within outer class blocks
+	defined by {}; similarly:~[M~and~]M~for [count] previous/next END of a
+	method.  Similar to:~[[~and~]]~ 
+- 03/12/11~vnew~does a vert split, but DOESN'T load the current file into the
+	new buffer
+- 03/04/11 inserting the date, as at the beginning of this tip, following the
+	"-": in~insert~mode, type: Ctrl-R=strftime("%D").  See the manpage
+	for strftime for more arguments.  This can also be remapped to a key.
+- summing columns:~:%!awk '{print;total+=$1}END{print total}'~, where~$1~ 
+	indicates the 1st column.
+- case sensitivity in a replace: use ~I~ at the end to force case-sensitive,
+	or~i~at the end to force case-insensitive.
+	i.e.:~:$s/search/replace/gcI~ 
+- 08/05/10 use~J~to join lines. lots better than~:j~, and you can precede
+	it with a count, like:~5J~ 
+- 07/23/10 offset from the search:
+	put the cursor at the end of the search:~/pattern/e~ 
+	put the cursor at 2 chars past the end of the search:~/pattern/e+2~ 
+	put the cursor at 2 chars before the end of the search:~/pattern/e-2~ 
+	put the cursor at 2 chars before the start of the search:~/pattern/s-2~ 
+- 06/21/10 change case of char under the cursor:~tilde~: ~ 
+- 06/16/10 use~g~to delete matching a pattern:
+	~:g/SEND:$/d~deletes all lines beginning with "SEND:".
+- 04/06/10 use redir to output vim command output to a register so you can use
+	it elsewhere.  Example: I want to look at the value of a variable, say
+	sessionoptions, and add the variable set to my vimrc.  I'll do this by
+	redirecting the output of VIM commands to register 'y' using redir:
+	~:redir @y~
+	~:set sessionoptions~
+	~:redir END~
+
+	Now register y contains the value of sessionoptions.
+- 03/20/10 goodbye BufExplorer.  All this started here:
+	http://vim.wikia.com/wiki/Easier_buffer_switching
+
+	You've turned on the wildmenu using:
+	~set wildchar=<Tab> wildmenu wildmode=full~
+	Now you can get a completion list of buffers:
+	~:bu <Tab>~
+	Use sunstring to narrow (e.g. beginning of filename):
+	~:bu .vi<Tab>~
+- 03/20/10 switch to the 'alternate file'.  This is an mru buffer of size 2,
+	and is vim window specific, not gui-window specific.
+	~:b#~, or~Ctrl-^~ 
+- 03/20/10 load a buffer w/o going through bufexplorer, by name:
+	~bu: filename[tab complete]~
+- 12/16/09 deleting every other character: :%s/\(.\)\(.\)/\2/g  
+- 11/23/09 case SENSITIVE search/replace:~:s/old/new/gI~ 
+- 10/07/09 case INSENSITIVE search/replace:~:s/old/new/gi~ 
+- 08/17/09 jumping to the last edit:~`.~; jumping to the line of the last
+	edit:~'.~ 
+- 7/29/07~Ctrl-o/Ctrl-i~moves through the list of recent positions, even
+	across files, can be better than setting marks
+- 08/17/09 inserting the current search into the command line:~Ctrl-R /~.
+	Related:~Ctrl-R +~ (or Ctrl-R *, not sure of the difference) for the
+	contents of the clipboard, and~Ctrl-R .~ for the last inserted text.
+- 08/06/11 accepting/cancelling~Ctrl-n~completion:
+	~Ctrl-y~accepts, and~Ctrl-E~cancels.
+- 08/05/09 reformatting current paragraph:~gq}~ 
+	If reformatting comments, and you want all lines after the first to be
+	indented, reformat, then indent the 2nd line, then reformat again.
+	See also: |pb2q-cmode-formatting|.
+- 07/30/09 displaying tabs:~:set list~ 
+- 07/23/07~Ctrl-e/Ctrl-y~scroll up or down
+- unix -> dos -> unix newline conversion: open file in VIM,
+	~:set fileformat=dos~then~:w~ 
+- getting the full path to current file: ~1 Ctrl-g~ -- ~2 Ctrl-g~also prefixes
+	the buffer number   --   based on just~Ctrl-g~which prints just the
+	filename.  file information
+- MORE MOVEMENT:
+	- z stuff:~zRETURN~to take current line to the top,~z_~to move current
+		line to bottom, and~z.~(or~zz~, natch), to move current line to
+		the center 
+	-~H~(home) to move cursor to top line,~M~to move cursor to Middle line,
+		and~L~to move cursor to last line.  Precede any with a number
+		for an offset, so:~10L~moves cursor 10 lines up from the bottom
+	- Scrolling: in addition to~Ctrl-f~and~Ctrl-b~(scroll forward, back by
+		a full screen), you have~Ctrl-d~for scroll forward a half
+		screen, and~Ctrl-u~for scroll back by a half screen
+	-~-~moves cursor to first char of previous line.  Opposite of~RETURN~ 
+		(next line), which is the same as~+~ 
+-~`m~backtick m (after~mm~), moves to the marked CHARACTER, instead of the
+	marked line (a la~'m~)
+-~``~return to character of previous mark after a move
+-~:grep~to get a list of hits on the searched text in a set of files (current
+	dir?) 
+- 8/15/06 on a func name and hit~[I:~to do a search through #includefiles XXX
+- 8/9/06 use~mK~to set a mark, where K is a letter (e.g. mm), then use~'m~ to
+	jump to the mark
+- 8/9/06~Ctrl-^~switch to last buffer
+- 7/21/06 when entering search,~Ctrl-r Ctrl-w~puts word under cursor in the
+	search 
+- 7/21/06 when inserting, w/ partial word, type~Ctrl-p~to see a list of matches
+	from the same file
+- searching/replace:
+	- To find or replace line breaks or tab characters, use~Ctrl-v~ 
+		followed by the enter or tab key, OR: \t for tabs, \n for
+		newline (newline for search & left-hand substitute), \r newline
+		(right-hand substitute)
+- upper/lower case
+	- 8/7/08 better word uppercase using motions: uppercase N words:~NgUw~ 
+	- 9/2/08 equivalent for lowercase (lowercase 'u'):~Nguw~ 
+	- uppercase (rest of) word:~vEU~ 
+	- lowercase (rest of) word:~veu~ 
+	- uppercase line:~gUU~ 
+	- lowercase line:~guu~ 
+- Pasting into : command line (eg a search): Ctrl-r" (" for the default paste
+	register, or a specific register id  XXX
+- 7/23/07~zt~scroll current line to top of window
+- 7/23/07~''~jump to previous position
+- 7/29/07~Ctrl-g~to show file info,~ga~to show character info 
+- 7/29/07~[{~and~]}~for jump to previous/next '{' (block begin) of current
+	scope
+- 7/29/07~gq~reformat selection
+- 7/29/07~'[~and~']~- move to beginning/end of most recent edit
+- 7/30/07 /\ctext is a case-insensitive search for 'text' (\c makes it case
+	insensitive, and of course \C forces a case-sensitive search XXX
+- 8/24/07~!}fmt -80~reformat lines by word units over 80 columns
+- 10/5/07 hex editing:~%!xxd~to send buff through xxd, and~%!xxd -r~to
+	write changes
+- 10/8/07 regexp for begin and end of words in searches: <\ \> a la:
+	:%s/<\text\>/replace  XXX
+- 10/8/07 using marks for movement: set a mark~m~, then you can use
+	~command+'m~to operate to mark, like:~d'm~ 
+- 12/31/07 WINDOWS:
+	-~Ctrl-w -N~or~:res[ize] -N~(similarly with~Ctrl-w +~):
+		shrink/grow window HEIGHT by N 
+	-~Ctrl-w <~and~Ctrl-w >~to decrease/increase window WIDTH
+	-~Ctrl-w w~moves to window below/right,~Ctrl-w W~moves to above/left
+- 1/10/08 tabs->chars:
+	~:set expandtab~
+	~:%retab~
+	- EXCEPT: All tabs that come after a non-blank character are kept.  To
+		convert those as well, add a !:~:%retab!~ 
+	  This is a little bit dangerous, because it can also change tabs
+		inside a string.  To check if these exist, you could use this:
+		/"[^"\t]*\t[^"]*"  XXX
+	  It's recommended not to use hard tabs inside a string.  Replace them
+	  	with "\t" to avoid trouble.  XXX
+- 1/10/08 chars->tabs
+	~:set noexpandtab~
+	~:%retab!~
+- 1/10/08 changing CRLF issues:  vim.wikia.com—VimTip26
+   	http://vim.wikia.com/wiki/VimTip26
+	- write  to unix style:~:w ++ff=unix~ 
+- Command Line editing window:~Ctrl-f~while in the cmdline to open, or~q:~to
+   	open from a command mode.
+  Close with:~<CR>~to execute the command, or~Ctrl-c~to exit with no exec
+- Help:~Ctrl-]~follows a help link, or~Ctrl-o~goes back
+- 7/21/08 doing visual diffs on open buffers: put two files side by side and
+   	run~:diffthis~on both.  run~:diffupdate~to force an update.  run
+   	~:diffoff~ON EACH BUFFER when finished
+
+
+===============================================================================
+Internalized This					     *pb2q-Internalized*
+
+- 08/06/09 reformatting current block: define a visual block and then~gq~ 
+	The problem with gqw is that it sees an entire comment block as a
+	single paragraph, so it will continue to format all paragraphs until
+	the end of the comment block.  See also: |pb2q-cmode-formatting|.
+- 10/07/09 search/replace from current line to the end of the file:
+	~:,$s/old/new/g~
+- 07/29/07 moving to specific characters in a line:~f~and~t~(forwards,
+	backwards is~F~and~T~), for instance, movement to place the cursor ON
+	the next occurence of character c:~fc~; movement to place the cursor
+	BEFORE the next occurence of character c:~tc~.  Can be used with
+	editing commands, e.g.~dfc~deletes up to and including the next
+	character 'c', ~dtc~ deletes up to but not including the next
+	character c
+- 7/29/07~:sav name~'save as', saves buffer to different file and makes that
+	file the current buffer, unlike~:w~ 
+- 7/6/07~:wa~saves all the open files, :qa quits all open files (and exits
+	vim), and~:wqa~saves and then closes all open files.
+- 7/21/06 hit * to search for the word under the cursor, # for reverse search XXX
+- 7/21/06~gd~does same thing
+- 7/21/06 hit~%~to match parens (braces, etc)
+- 10/8/06 "*p (doublequote->asterix->p) does a put from the OS clipboard 
+	- and of course, "*y does a yank (copy) to the clipboard XXX
+- 10/30/06 macros
+	- recording macro:~q+[reg char]~macro q
+	- playing macro:~@q~ 
+	- repeat:~@@~ 
+- symbol completion: type first chars of a symbol,say a variable name, then
+	type~Ctrl-n~to find completions, then~Ctrl-n/Ctrl-p~to cycle through
+	completion list
+-~80|~(thats the vertical bar character) for 'goto column 80', generally:
+	~n|~for 'goto column n'
+-~gf~opens file under cursor
+- 7/29/07~:cd~change working directory
+- 7/29/07~[[~and~]]~for jump to previous/next function block begin ('{')
+- 7/29/07~{~and~}~for jump to beginning of previous/next group of newlines
+
+
+===============================================================================
+Needs Review						      *pb2q-NeedsReview*
+
+- 2/22/08 so~[[~does reverse-search for a function begin brace,~]]~does a
+	forward-search for a function begin brace, and~[]~does a
+	reverse-search for a function end brace and~][~does a forward search
+	for a function end brace
+
+===============================================================================
+To Learn							  *pb2q-ToLearn*
+
+- 03/12/11 basic movement that I should already know:
+	~H~moves to the first line displayed.
+	~L~moves to the last line displayed.
+	~M~moves to the middle line displayed.
+	~Ctrl-d~scroll forward half page.
+	~Ctrl-u~scroll backward half page.
+- 03/12/11 use capital registers when setting a mark to make the register
+	active ACROSS files!  e.g., ~mM~ sets a mark that can be jumped back
+	to when in another file.  Problem is, jumping back to the mark loads
+	the distant file in the CURRENT buffer.
+
+
+===============================================================================
+Questions/Needs						  *pb2q-Questions/Needs*
+
+- 03/12/11 want the capital registers using mark to jump into open buffers.
+	i.e., if I set a mark with~mM~in the RIGHT window, go to edit code in
+	the LEFT window, and then hit~`M~, I want to jump to the mark position
+	in the RIGHT window.
+- 08/04/10 need to be able to scroll the "other window" without leaving
+	current window.  i.e. I have 2 vsplit windows, and I want to scroll
+	the ine I'm NOT in.  May be able to do something with the other window
+	as the "preview" window.
+- how do I 'R' replace, BACKWARDS?  i.e. I want to insert the word 'drawkcab'
+	before the cursor, by typing the word, replacing the char before the
+	cursor.
+- need to find or make something similar to * (search for word under cursor)
+	that works for the whole text of the current line or current selection
+- how to prevent vim from closing second :vsp buffer when the file in it goes
+	away (bad terminology here, I want to always have 2 buffers open in a
+	big vim
+- *pb2q-cmode-formatting*
+	I'd like to change the c-mode formatting code so that it defaults to
+		my style of comment formatting, i.e. all subsequent lines in a
+		paragraph (after the 1st) are tabbed.
+- vimrc research.  vimrcs to check out:
+	http://www.vi-improved.org/vimrc.php
+	http://newbiedoc.sourceforge.net/tutorials/vim/appendixa.html.en#JESSE-VIMRC
+
+===============================================================================
+Answered							 *pb2q-Answered*
+
+- 'command line' editing, e.g. 'go to beginning of command line'  <-- just use
+	~Ctrl-f~ to go into command line history editor.
+
+
